@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Weather App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f0f0f0;
+      padding: 30px;
+    }
+    #weather {
+      margin-top: 20px;
+      padding: 20px;
+      background: #fff;
+      border-radius: 8px;
+      display: inline-block;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+    input {
+      padding: 8px;
+      width: 200px;
+    }
+    button {
+      padding: 8px 12px;
+      margin-left: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🌦️ Simple Weather App</h1>
+  <input type="text" id="city" placeholder="Enter city name">
+  <button onclick="getWeather()">Get Weather</button>
+
+  <div id="weather"></div>
+
+  <script>
+    async function getWeather() {
+      const city = document.getElementById("city").value;
+      const apiKey = ""; // Replace with your OpenWeatherMap API key
+      const url = `https://api.openweathermap.org/data/3.0/onecall?lat=33.44&lon=-94.04&exclude=hourly,daily&appid={API key}`;
+
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.cod === 200) {
+          document.getElementById("weather").innerHTML = `
+            <h2>${data.name}, ${data.sys.country}</h2>
+            <p>🌡️ Temperature: ${data.main.temp}°C</p>
+            <p>☁️ Weather: ${data.weather[0].main}</p>
+            <p>💧 Humidity: ${data.main.humidity}%</p>
+            <p>🌬️ Wind Speed: ${data.wind.speed} m/s</p>
+          `;
+        } else {
+          document.getElementById("weather").innerHTML = `<p>City not found 😢</p>`;
+        }
+      } catch (error) {
+        document.getElementById("weather").innerHTML = `<p>Error fetching data</p>`;
+      }
+    }
+  </script>
+
+</body>
+</html>
